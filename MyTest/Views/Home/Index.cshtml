@@ -1,10 +1,56 @@
-﻿@{
+﻿@model IEnumerable<MyTest.Models.Student>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
+
 <div class="text-center">
-    <h1 class="display-4">ברוכה הבאה דנה</h1>
+    <h1 class="display-4">Welcome Dana</h1>
     <p><a href="https://gemini.google.com/app">Gemini</a></p>
     <p><a href="https://chatgpt.com">ChatGPT</a></p>
     <p><a href="https://claude.ai">Claude</a></p>
+</div>
+
+
+
+<div class="container mt-5">
+    <h2 class="mb-4">Linked Student Data</h2>
+
+    <table class="table table-bordered table-striped shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Full Name</th>
+                <th>School</th>
+                <th>Classroom</th>
+                <th>Courses</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any()) {
+                foreach (var student in Model) {
+                    <tr>
+                        <td class="fw-bold">@student.FirstName @student.LastName</td>
+                        <td>@(student.Classroom?.School?.Name ?? "Unassigned")</td>
+                        <td>@(student.Classroom?.Name ?? "Unassigned")</td>
+                        <td>
+                            @if (student.Courses != null && student.Courses.Any()) {
+                                <ul class="mb-0">
+                                    @foreach (var course in student.Courses) {
+                                        <li>@course.Title</li>
+                                    }
+                                </ul>
+                            } else {
+                                <span class="text-muted">No courses registered</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            } else {
+                <tr>
+                    <td colspan="4" class="text-center text-muted">No data available in the database</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
