@@ -44,6 +44,23 @@ namespace MyTest.Controllers
             return View(classroom);
         }
 
+        public async Task<IActionResult> WithStudents(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+
+            // שליפת הכיתה יחד עם כל התלמידים שמשויכים אליה
+            var classroom = await _context.Classrooms
+                .Include(c => c.Students.OrderBy(s => s.FirstName))
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (classroom == null) {
+                return NotFound();
+            }
+
+            return View(classroom);
+        }
+
         // GET: Classrooms/Create
         public IActionResult Create()
         {

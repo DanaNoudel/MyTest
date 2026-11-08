@@ -1,0 +1,50 @@
+﻿@model MyTest.Models.Classroom
+
+@{
+    ViewData["Title"] = "Classroom Details";
+}
+
+<!-- Top section: Parent details -->
+<div class="parent-card">
+    <h2>Classroom Details: @Model.Name</h2>
+
+    <div class="parent-fields">
+        <span class="field-label">Classroom ID:</span> @Model.Id <br />
+        <span class="field-label">Classroom Name:</span> @Model.Name <br />
+        <span class="field-label">Enrolled Students:</span> @(Model.Students?.Count ?? 0) <br />
+    </div>
+</div>
+
+<!-- Bottom section: Linked records table -->
+<div class="children-section">
+    <h3>Assigned Students <span class="count-badge">(@(Model.Students?.Count ?? 0))</span></h3>
+
+    @if (Model.Students != null && Model.Students.Any()) {
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model.Students) {
+                    <tr>
+                        <td>@student.FirstName</td>
+                        <td>@student.LastName</td>
+                        <td>
+                            <a class="btn-details" asp-controller="Students" asp-action="Details" asp-route-id="@student.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else {
+        <div class="empty-message">No students enrolled in this classroom yet.</div>
+    }
+</div>
+
+<div style="margin-top: 20px;">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
